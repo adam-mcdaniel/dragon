@@ -19,7 +19,7 @@ python3 -m pip install lark-parser
 Clone the repo.
 
 ```bash
-git clone "https://github.com/adam-mcdaniel/dragon
+git clone "https://github.com/adam-mcdaniel/dragon"
 
 cd dragon
 ```
