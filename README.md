@@ -9,6 +9,8 @@ Install dependencies.
 ```bash
 # Ubuntu
 sudo apt-get install make
+
+# The version on apt is outdated, download from cmake.org
 sudo apt-get install cmake
 
 sudo apt-get install python3-dev
