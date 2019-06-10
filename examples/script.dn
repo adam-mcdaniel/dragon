@@ -1,28 +1,24 @@
 
 dict = {
     ();
-}
-;
+};
 
 list = {
     [];
-}
-;
+};
 
 File = {
     self = dict();
-self["open"] = dict();
+    self["open"] = dict();
 
-self["open"]["fn"] = {
-    s = ;
-name = ;
-| name "Opening file: ";
-}
-;
+    self["open"]["fn"] = {
+        s = ;
+        name = ;
+        | name "Opening file: ";
+    };
 
-self;
-}
-;
+    self;
+};
 
 f = File();
 
