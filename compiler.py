@@ -1,4 +1,5 @@
 from sys import stdin
+from argparse import ArgumentParser, FileType
 from lark import Lark, Transformer
 
 GRAMMAR = r'''
@@ -105,16 +106,33 @@ def parse(text): return DragonParser().transform(
 )
 
 
+parser = ArgumentParser(
+    description='Compiler for a mini language that targets the Dragon VM')
 
-print(f'''#include "machine.hpp"
+parser.add_argument('-f', '--file', dest="file", metavar='Script path', type=str,
+                    default=None, help='The path to the file to run')
+
+parser.add_argument('script', metavar='Script text', nargs='*', type=FileType('r'),
+                     default=stdin, help='The script text to run')
+
+args = parser.parse_args()
+
+text = ""
+if args.file:
+    text = open(args.file).read()
+elif args.script:
+    text = '\n'.join(map(str, args.script))
+
+if text:
+    print(f'''#include "machine.hpp"
 #include <map>
 #include <iostream>
 #include <string>
 
 int main()
 {{
-	auto dragon = Machine();
-{str(parse(stdin.read()))}
+    auto dragon = Machine();
+{str(parse(text))}
     std::cout << dragon.format() << std::endl;
 }}
 ''')
