@@ -1,4 +1,4 @@
-from sys import argv
+from sys import stdin
 from lark import Lark, Transformer
 
 GRAMMAR = r'''
@@ -10,7 +10,7 @@ instruction: store | print | value
 store: name "=" [value] -> store
      | index "=" [value] -> assign
 
-print: "|>" (value)*
+print: "|" (value)*
 call: value "(" (value ",")* value? ")"
 
 // VALUES
@@ -21,6 +21,7 @@ value: "(" ")" -> dict
      | string
      | number
      | index
+     | "@" -> none
      | name -> load
 
 index: value "[" (number | string) "]"
@@ -50,6 +51,9 @@ class DragonParser(Transformer):
 
     def string(
         self, t): return f"{MACHINE_NAME}.push(Object::String({str(t[0])}));"
+
+    def none(
+        self, t): return f"{MACHINE_NAME}.push(Object());"
 
     def name(
         self, t): return f"{MACHINE_NAME}.push(Object::String(\"{str(t[0])}\"));"
@@ -101,16 +105,16 @@ def parse(text): return DragonParser().transform(
 )
 
 
-if len(argv) > 1:
-    print(f'''#include "machine.hpp"
+
+print(f'''#include "machine.hpp"
 #include <map>
 #include <iostream>
 #include <string>
 
 int main()
 {{
-    {str(parse(sys.argv[1]))}
+	auto dragon = Machine();
+{str(parse(stdin.read()))}
+    std::cout << dragon.format() << std::endl;
 }}
 ''')
-else:
-    print("No input script")
