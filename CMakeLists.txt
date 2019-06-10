@@ -1,10 +1,10 @@
-# 
+#
 # CMake file for building dragon
-# 
+#
 project(dragon)
 
 # Minimum CMake doesnt really matter to me, I just picked mine
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 # We have to use C++17.
 set(CMAKE_CXX_STANDARD 17)
 
