@@ -3,7 +3,6 @@ from argparse import ArgumentParser, FileType
 from lark import Lark, Transformer
 
 GRAMMAR = r'''
-
 block: (instruction ";")*
 instruction: store | print | value
 
@@ -110,10 +109,10 @@ parser = ArgumentParser(
     description='Compiler for a mini language that targets the Dragon VM')
 
 parser.add_argument('-f', '--file', dest="file", metavar='Script path', type=str,
-                    default=None, help='The path to the file to run')
+                    default=None, help='The path to a file to compile')
 
 parser.add_argument('script', metavar='Script text', nargs='*', type=FileType('r'),
-                     default=stdin, help='The script text to run')
+                     default=stdin, help='The script text to compile')
 
 args = parser.parse_args()
 
