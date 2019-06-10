@@ -1,5 +1,5 @@
 all:
-	clang++ main.cpp machine.cpp -std=c++17 -o main -O3
+	clang++ machine.cpp main.cpp -std=c++17 -o main -O3
 	./main
 
 
