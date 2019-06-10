@@ -5,7 +5,7 @@
 
 int main()
 {
-	auto dragon = Machine();
+    auto dragon = Machine();
 	dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Map()); }));
 	dragon.push(Object::String("dict"));
 	dragon.store();
