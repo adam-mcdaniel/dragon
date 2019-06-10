@@ -2,6 +2,7 @@ from sys import stdin
 from argparse import ArgumentParser, FileType
 from lark import Lark, Transformer
 
+
 GRAMMAR = r'''
 block: (instruction ";")*
 instruction: store | print | value
