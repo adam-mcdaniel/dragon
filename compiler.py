@@ -109,10 +109,10 @@ def parse(text): return DragonParser().transform(
 parser = ArgumentParser(
     description='Compiler for a mini language that targets the Dragon VM')
 
-parser.add_argument('-f', '--file', dest="file", metavar='Script path', type=str,
+parser.add_argument('-f', '--file', dest="file", metavar='script path', type=str,
                     default=None, help='The path to a file to compile')
 
-parser.add_argument('script', metavar='Script text', nargs='*', type=FileType('r'),
+parser.add_argument('script', metavar='script text', nargs='*', type=FileType('r'),
                      default=stdin, help='The script text to compile')
 
 args = parser.parse_args()
