@@ -37,7 +37,7 @@ Compile a script.
 
 ```bash
 # in build directory
-cat ../examples/script.dn | python ../compiler/main.py > ../src/main.cpp;
+cat ../examples/script.dn | python3 ../compiler/main.py > ../src/main.cpp;
 
 make
 ./dragon
