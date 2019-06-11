@@ -410,7 +410,7 @@ void Machine::sub()
 {
     auto a = *this->pop();
     auto b = *this->pop();
-    this->push(b - a);
+    this->push(a - b);
 }
 
 void Machine::mul()
@@ -424,7 +424,7 @@ void Machine::div()
 {
     auto a = *this->pop();
     auto b = *this->pop();
-    this->push(b / a);
+    this->push(a / b);
 }
 
 void Machine::negate()

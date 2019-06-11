@@ -6,18 +6,42 @@
 int main()
 {
     auto dragon = Machine();
-	dragon.push(Object::Number(4));dragon.negate(); dragon.push(Object::Number(2));dragon.add();
+	dragon.push(Object::Number(0));
 	dragon.push(Object::String("a"));
 	dragon.store();
 
-	dragon.push(Object::Number(3)); dragon.push(Object::Number(2));dragon.mul(); dragon.push(Object::Number(4));dragon.add();
-	dragon.push(Object::String("b"));
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::String("testing"));std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call(); })); dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::String("a"));
+	dragon.load();
+ }));dragon.while_loop();
+	dragon.push(Object::Bool(false));
+	dragon.push(Object::String("a"));
 	dragon.store();
 
-	dragon.push(Object::Number(5)); dragon.push(Object::Number(3)); dragon.push(Object::Number(2));dragon.mul();dragon.add();dragon.negate();
-	dragon.push(Object::String("c"));
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::String("testing"));std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call(); })); dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::String("a"));
+	dragon.load();
+ }));dragon.while_loop();
+	dragon.push(Object::Number(0.5));
+	dragon.push(Object::String("a"));
 	dragon.store();
 
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::String("testing"));std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call(); })); dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::String("a"));
+	dragon.load();
+ }));dragon.while_loop();
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Number(4)); dragon.push(Object::Number(2));dragon.div();std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call();
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Number(1)); dragon.push(Object::Number(4));dragon.sub();std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call();
+	dragon.push(Object::Number(10));
+	dragon.push(Object::String("a"));
+	dragon.store();
+
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::String("testing"));std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call(); })); dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::Number(1)); 	dragon.push(Object::String("a"));
+	dragon.load();
+dragon.sub();
+	dragon.push(Object::String("a"));
+	dragon.store();
+
+	dragon.push(Object::String("a"));
+	dragon.load();
+ }));dragon.while_loop();
     std::cout << dragon.format() << std::endl;
 }
 

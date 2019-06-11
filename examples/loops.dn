@@ -20,8 +20,12 @@ while {a;} do {
     | "testing";
 };
 
-a = 4;
+| 2 / 4;
+| 4 - 1;
 
-while {a;} do {
+
+a = 10;
+
+while {a = a - 1; a;} do {
     | "testing";
 };
