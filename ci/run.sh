@@ -1,2 +1,2 @@
 #!/bin/bash
-cat dragon.yaml | rusty-ci > Makefile; make
+cat dragon.yaml | rusty-ci > Makefile
