@@ -8,7 +8,8 @@ cmake_minimum_required(VERSION 3.10)
 # We have to use C++17.
 set(CMAKE_CXX_STANDARD 17)
 
-
+# Show all possible warnings and use highest optimization level
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3")
 
 # `dragon` will be our main executable
 add_executable(dragon src/main.cpp)

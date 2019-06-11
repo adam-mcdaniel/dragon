@@ -144,6 +144,7 @@ std::string Object::format()
     }
     break;
     }
+    return "None";
 }
 
 Object::operator bool()

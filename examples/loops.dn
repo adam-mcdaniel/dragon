@@ -24,8 +24,8 @@ while {a;} do {
 | 4 - 1;
 
 
-a = 10;
+a = 50000;
 
 while {a = a - 1; a;} do {
-    | "testing";
+    | 50000 - a;
 };

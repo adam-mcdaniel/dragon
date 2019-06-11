@@ -29,11 +29,13 @@ dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& 
  }));dragon.while_loop();
 dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Number(4)); dragon.push(Object::Number(2));dragon.div();std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call();
 dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Number(1)); dragon.push(Object::Number(4));dragon.sub();std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call();
-	dragon.push(Object::Number(10));
+	dragon.push(Object::Number(50000));
 	dragon.push(Object::String("a"));
 	dragon.store();
 
-dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::String("testing"));std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call(); })); dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::Number(1)); 	dragon.push(Object::String("a"));
+dragon.push(Object::Fn([](Machine& dragon) { dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::String("a"));
+	dragon.load();
+ dragon.push(Object::Number(50000));dragon.sub();std::cout << (*dragon.pop()).format()  << std::endl; }));dragon.call(); })); dragon.push(Object::Fn([](Machine& dragon) { 	dragon.push(Object::Number(1)); 	dragon.push(Object::String("a"));
 	dragon.load();
 dragon.sub();
 	dragon.push(Object::String("a"));
