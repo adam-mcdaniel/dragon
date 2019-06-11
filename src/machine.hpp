@@ -20,13 +20,21 @@ public:
     void push(Object);
     void push(std::shared_ptr<Object>);
     std::shared_ptr<Object> pop();
-    void call();
 
     void load();
     void store();
 
     void assign();
     void index();
+
+    void call();
+    void while_loop();
+
+    void add();
+    void sub();
+    void mul();
+    void div();
+    void negate();
 
     std::string format();
 

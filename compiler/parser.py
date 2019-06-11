@@ -3,7 +3,7 @@ from lark import Lark, Transformer
 
 GRAMMAR = r'''
 block: (instruction ";")*
-instruction: store | print | value
+instruction: while_loop | store | print | value
 
 // INSTRUCTIONS
 store: name "=" [value] -> store
@@ -11,13 +11,24 @@ store: name "=" [value] -> store
 
 print: "|" (value)*
 call: value "(" (value ",")* value? ")"
+while_loop: "while" func "do" func
+
+negate.0: "-" value
+add.2: value "+" value
+sub.2: value "-" value
+mul.1: value "*" value
+div.1: value "/" value
+
+math: add | sub | mul | div | negate
 
 // VALUES
 value: "(" ")" -> dict
      | "[" "]" -> list
-     | "{" block "}" -> func
      | extern
+     | func
      | call
+     | math
+     | bool
      | string
      | number
      | index
@@ -27,9 +38,11 @@ value: "(" ")" -> dict
 
 index: value "[" (number | string) "]"
 
+func: "{" block "}"
 extern: EXTERN
 name: NAME
 string: STRING
+bool: "true" -> true | "false" -> false
 number: NUMBER | FLOAT_NUMBER
 
 NUMBER: /0|[1-9]\d*/i
@@ -54,11 +67,40 @@ class DragonParser(Transformer):
         block = block[block.find("{")+1:block.rfind("}")]
         return self.func([block])
 
+
+    def while_loop(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.while_loop();"
+
+
     def call(
         self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.call();"
 
+    def negate(
+        self, t): return f"{str(t[0])}{MACHINE_NAME}.negate();"
+
+    def add(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.add();"
+
+    def sub(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.sub();"
+
+    def div(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.div();"
+
+    def mul(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.mul();"
+
+    def math(
+        self, t): return f"{str(t[0])}"
+
     def string(
         self, t): return f"{MACHINE_NAME}.push(Object::String({str(t[0])}));"
+
+    def true(
+        self, t): return f"{MACHINE_NAME}.push(Object::Bool(true));"
+
+    def false(
+        self, t): return f"{MACHINE_NAME}.push(Object::Bool(false));"
 
     def none(
         self, t): return f"{MACHINE_NAME}.push(Object());"

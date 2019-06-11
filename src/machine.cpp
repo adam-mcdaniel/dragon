@@ -148,11 +148,18 @@ std::string Object::format()
 
 Object::operator bool()
 {
-    auto result = this->get<bool>();
-    if (result)
+    auto num_result = this->get<double>();
+    if (num_result)
     {
-        return result.unwrap();
+        return int(num_result.unwrap());
     }
+    
+    auto bool_result = this->get<bool>();
+    if (bool_result)
+    {
+        return bool_result.unwrap();
+    }
+
     return false;
 }
 
@@ -392,6 +399,41 @@ std::shared_ptr<Object> Machine::pop()
     }
 }
 
+void Machine::add()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b + a);
+}
+
+void Machine::sub()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b - a);
+}
+
+void Machine::mul()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b * a);
+}
+
+void Machine::div()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b / a);
+}
+
+void Machine::negate()
+{
+    auto a = *this->pop();
+    this->push(Object::Number(-(a.get<double>().unwrap())));
+}
+
+
 void Machine::call()
 {
     Machine temp_machine = Machine(*this);
@@ -399,6 +441,18 @@ void Machine::call()
     auto f = temp_machine.pop();
     (*f)(temp_machine);
     this->stack = temp_machine.stack;
+}
+
+void Machine::while_loop()
+{
+    auto condition_f = this->pop();
+    auto body_f = this->pop();
+
+    (*condition_f)(*this);
+    while (*this->pop()) {
+        (*body_f)(*this);
+        (*condition_f)(*this);
+    }
 }
 
 void Machine::assign()
