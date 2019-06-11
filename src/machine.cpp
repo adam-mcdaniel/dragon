@@ -399,6 +399,41 @@ std::shared_ptr<Object> Machine::pop()
     }
 }
 
+void Machine::add()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b + a);
+}
+
+void Machine::sub()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b - a);
+}
+
+void Machine::mul()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b * a);
+}
+
+void Machine::div()
+{
+    auto a = *this->pop();
+    auto b = *this->pop();
+    this->push(b / a);
+}
+
+void Machine::negate()
+{
+    auto a = *this->pop();
+    this->push(Object::Number(-(a.get<double>().unwrap())));
+}
+
+
 void Machine::call()
 {
     Machine temp_machine = Machine(*this);
