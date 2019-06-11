@@ -92,6 +92,7 @@ schedulers:
     triggers:
       - ".*"
     builders:
+      - dragon-ci
       - dragon-release
       - dragon-compiler-build
       - dragon-vm-build
