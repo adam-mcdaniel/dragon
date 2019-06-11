@@ -5,7 +5,8 @@
 
 int main()
 {
-    auto dragon = Machine();
+    auto dragon = Machine
+      
 	dragon.push(Object::Number(4));dragon.negate(); dragon.push(Object::Number(2));dragon.add();
 	dragon.push(Object::String("a"));
 	dragon.store();
