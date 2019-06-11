@@ -24,7 +24,7 @@ source ~/.bashrc
 ```
 
 Install dragon with rapture
-```
+```bash
 rapt install https://raw.githubusercontent.com/adam-mcdaniel/rapture/master/scripts/rapture.rapt
 ```
 
