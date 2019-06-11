@@ -11,6 +11,18 @@ master:
     - 5
 
 builders:
+  dragon-ci:
+    repo:
+      - "https://github.com/adam-mcdaniel/dragon"
+
+    workers:
+      - dragon-ci-worker
+
+    script:
+      - cd ci
+      - chmox +x ./run.sh
+      - ./run.sh
+
   dragon-release:
     repo:
       - "https://github.com/adam-mcdaniel/dragon"
@@ -53,6 +65,16 @@ builders:
       - python3 compiler/main.py -f examples/extern.dn
 
 schedulers:
+  ci-change:
+    branch:
+      - ".*"
+    triggers:
+      - '.*\.yaml'
+      - '.*Makefile'
+      - '.*\.sh'
+    builders:
+      - dragon-ci
+
   vm-change:
     branch:
       - ".*"
@@ -83,6 +105,14 @@ schedulers:
       - dragon-compiler-build
 
 workers:
+  dragon-ci-worker:
+    basedir:
+      - "/home/adam/Desktop/dragon-cxx/ci/ci-worker"
+    masterhost:
+      - localhost
+    password:
+      - pass
+
   dragon-vm-worker:
     basedir:
       - "/home/adam/Desktop/dragon-cxx/ci/vm-worker"
