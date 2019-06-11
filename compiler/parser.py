@@ -13,12 +13,21 @@ print: "|" (value)*
 call: value "(" (value ",")* value? ")"
 while_loop: "while" func "do" func
 
+negate.0: "-" value
+add.2: value "+" value
+sub.2: value "-" value
+mul.1: value "*" value
+div.1: value "/" value
+
+math: add | sub | mul | div | negate
+
 // VALUES
 value: "(" ")" -> dict
      | "[" "]" -> list
      | extern
      | func
      | call
+     | math
      | bool
      | string
      | number
@@ -62,8 +71,27 @@ class DragonParser(Transformer):
     def while_loop(
         self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.while_loop();"
 
+
     def call(
         self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.call();"
+
+    def negate(
+        self, t): return f"{str(t[0])}{MACHINE_NAME}.negate();"
+
+    def add(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.add();"
+
+    def sub(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.sub();"
+
+    def div(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.div();"
+
+    def mul(
+        self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.mul();"
+
+    def math(
+        self, t): return f"{str(t[0])}"
 
     def string(
         self, t): return f"{MACHINE_NAME}.push(Object::String({str(t[0])}));"

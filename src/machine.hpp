@@ -30,6 +30,12 @@ public:
     void call();
     void while_loop();
 
+    void add();
+    void sub();
+    void mul();
+    void div();
+    void negate();
+
     std::string format();
 
 private:
