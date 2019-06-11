@@ -16,15 +16,18 @@ call: value "(" (value ",")* value? ")"
 value: "(" ")" -> dict
      | "[" "]" -> list
      | "{" block "}" -> func
+     | extern
      | call
      | string
      | number
      | index
      | "@" -> none
      | name -> load
+     | "(" value ")"
 
 index: value "[" (number | string) "]"
 
+extern: EXTERN
 name: NAME
 string: STRING
 number: NUMBER | FLOAT_NUMBER
@@ -34,6 +37,7 @@ FLOAT_NUMBER: /((\d+\.\d*|\.\d+)(e[-+]?\d+)?|\d+(e[-+]?\d+))/i
 STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
 NAME: /[a-zA-Z_]\w*/
 COMMENT: /#[^\n]*/
+EXTERN: /extern\s*(?:[^}]*{[^}]*}|;)/
 %ignore /[\t \f\n]+/  // WS
 %ignore /\\[\t \f\n]*\r?\n/   // LINE_CONT
 %ignore COMMENT
@@ -44,6 +48,11 @@ MACHINE_NAME = "dragon"
 class DragonParser(Transformer):
 
     def instruction(self, t): return f"{str(t[0])}"
+
+    def extern(self, t):
+        block = t[0]
+        block = block[block.find("{")+1:block.rfind("}")]
+        return self.func([block])
 
     def call(
         self, t): return f"{' '.join(t[::-1])}{MACHINE_NAME}.call();"
