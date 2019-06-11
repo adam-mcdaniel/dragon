@@ -4,6 +4,35 @@ A statically compiled, dynamically typed programming language.
 
 ## Getting Started
 
+### Install with rapture
+
+Install rapture
+
+```bash
+# Install with cargo to build
+cargo install rapture
+
+# Bootstrap rapture
+rapt install https://raw.githubusercontent.com/adam-mcdaniel/rapture/master/scripts/rapture.rapt
+
+# Uninstall old cargo
+cargo uninstall rapture
+
+# Source your modified path
+. ~/.bashrc
+source ~/.bashrc
+```
+
+Install dragon with rapture
+```
+rapt install https://raw.githubusercontent.com/adam-mcdaniel/rapture/master/scripts/rapture.rapt
+
+```
+
+
+### Build from source
+
+
 Install dependencies.
 
 ```bash
