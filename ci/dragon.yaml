@@ -1,0 +1,138 @@
+master:
+  repo:
+    - https://github.com/adam-mcdaniel/dragon
+  title:
+    - Dragon CI
+  title-url:
+    - "https://github.com/adam-mcdaniel/dragon"
+  webserver-ip:
+    - localhost
+  poll-interval:
+    - 5
+
+builders:
+  dragon-ci:
+    repo:
+      - "https://github.com/adam-mcdaniel/dragon"
+
+    workers:
+      - dragon-ci-worker
+
+    script:
+      - cd ci
+      - chmod +x ./run.sh
+      - ./run.sh
+
+  dragon-release:
+    repo:
+      - "https://github.com/adam-mcdaniel/dragon"
+
+    workers:
+      - dragon-release-worker
+
+    script:
+      - echo test
+
+  dragon-vm-build:
+    repo:
+      - "https://github.com/adam-mcdaniel/dragon"
+
+    workers:
+      - dragon-vm-worker
+
+    script:
+      - rm -Rf build
+      - mkdir build
+      - cd build
+      - cmake ..
+      - make -j
+      - ./dragon
+
+  dragon-compiler-build:
+    repo:
+      - https://github.com/adam-mcdaniel/dragon
+
+    workers:
+      - dragon-compiler-worker
+
+    script:
+      - python3 -m pip install -U lark-parser
+      - python3 compiler/main.py -f examples/script.dn
+      - python3 compiler/main.py -f examples/hello_world.dn
+      - python3 compiler/main.py -f examples/loops.dn
+      - python3 compiler/main.py -f examples/math.dn
+      - python3 compiler/main.py -f examples/extern.dn
+
+schedulers:
+  ci-change:
+    branch:
+      - ".*"
+    triggers:
+      - '.*\.yaml'
+      - '.*Makefile'
+      - '.*\.sh'
+    builders:
+      - dragon-ci
+
+  vm-change:
+    branch:
+      - ".*"
+    triggers:
+      - '.*\.cpp'
+      - '.*\.hpp'
+      - '.*\.cmake'
+      - '.*CMakeLists\.txt'
+    builders:
+      - dragon-vm-build
+
+  release-check:
+    branch:
+      - "master"
+    triggers:
+      - ".*"
+    builders:
+      - dragon-ci
+      - dragon-release
+      - dragon-compiler-build
+      - dragon-vm-build
+
+  compiler-change:
+    branch:
+      - ".*"
+    triggers:
+      - '.*\.py'
+    builders:
+      - dragon-compiler-build
+
+workers:
+  dragon-ci-worker:
+    basedir:
+      - "/home/adam/Desktop/dragon-cxx/ci/ci-worker"
+    masterhost:
+      - localhost
+    password:
+      - pass
+
+  dragon-vm-worker:
+    basedir:
+      - "/home/adam/Desktop/dragon-cxx/ci/vm-worker"
+    masterhost:
+      - localhost
+    password:
+      - pass
+
+  dragon-compiler-worker:
+    basedir:
+      - "/home/adam/Desktop/dragon-cxx/ci/compiler-worker"
+    masterhost:
+      - localhost
+    password:
+      - pass
+
+  dragon-release-worker:
+    basedir:
+      - "/home/adam/Desktop/dragon-cxx/ci/release-worker"
+    masterhost:
+      - localhost
+    password:
+      - pass
