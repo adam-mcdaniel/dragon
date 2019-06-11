@@ -60,7 +60,6 @@ builders:
       - python3 compiler/main.py -f examples/script.dn
       - python3 compiler/main.py -f examples/hello_world.dn
       - python3 compiler/main.py -f examples/loops.dn
-      - python3 compiler/main.py -f examples/script.dn
       - python3 compiler/main.py -f examples/math.dn
       - python3 compiler/main.py -f examples/extern.dn
 
