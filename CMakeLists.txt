@@ -16,9 +16,9 @@ add_executable(dragon src/main.cpp)
 
 # These are the headers/C++ files to use
 set (components
-"function"
-"machine"
-"option"
+    "function"
+    "machine"
+    "option"
 )
 
 
