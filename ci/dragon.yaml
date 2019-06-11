@@ -20,7 +20,7 @@ builders:
 
     script:
       - cd ci
-      - chmox +x ./run.sh
+      - chmod +x ./run.sh
       - ./run.sh
 
   dragon-release:
