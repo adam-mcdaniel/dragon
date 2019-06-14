@@ -91,6 +91,14 @@ public:
     Object operator-(Object);
     Object operator*(Object);
     Object operator/(Object);
+    bool operator==(Object);
+    bool operator!=(Object);
+    bool operator>(Object);
+    bool operator<(Object);
+    bool operator>=(Object);
+    bool operator<=(Object);
+
+    bool is_none() {return this->type == Type::NoneType;}
 
 private:
     Type type;
