@@ -1,9 +1,0 @@
-cxx = (extern {
-    std::cout << "Hello extern!" << std::endl;
-
-
-    auto param1 = dragon.pop();
-    std::cout << "You said: " << param1->format() << std::endl;
-});
-
-cxx("I passed a value to a cxx function!");
