@@ -392,7 +392,7 @@ bool Object::operator!=(Object o)
     if (this->type != o.type) {
         return true;
     }
-    return this->value == o.value;
+    return this->value != o.value;
 }
 
 void Machine::push(Object o)
