@@ -18,6 +18,9 @@ public:
         return this->f(i);
     }
 
+    bool operator==(Function) {return false;}
+    bool operator==(Function) const {return false;}
+
 private:
     std::function<O(I)> f;
 };
