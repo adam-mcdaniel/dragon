@@ -379,6 +379,22 @@ Object Object::operator/(Object o)
     return Object();
 }
 
+bool Object::operator==(Object o)
+{
+    if (this->type == o.type) {
+        return this->value == o.value;
+    }
+    return false;
+}
+
+bool Object::operator!=(Object o)
+{
+    if (this->type != o.type) {
+        return true;
+    }
+    return this->value == o.value;
+}
+
 void Machine::push(Object o)
 {
     this->stack.push_back(std::make_shared<Object>(o));
