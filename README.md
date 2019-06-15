@@ -27,7 +27,6 @@ mkdir build
 cd build
 
 cmake ..
-make -j
-./dragon
+make install -j
 ```
 

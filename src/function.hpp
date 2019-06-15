@@ -13,16 +13,16 @@ public:
         this->f = std::function<O(I)>(t);
     }
 
-    O operator()(I i)
+    inline O operator()(I i)
     {
         return this->f(i);
     }
 
-    bool operator==(Function) {return false;}
-    bool operator==(Function) const {return false;}
+    inline bool operator==(Function) {return false;}
+    inline bool operator==(Function) const {return false;}
 
-    bool operator!=(Function) {return true;}
-    bool operator!=(Function) const {return true;}
+    inline bool operator!=(Function) {return true;}
+    inline bool operator!=(Function) const {return true;}
 
 private:
     std::function<O(I)> f;

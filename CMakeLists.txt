@@ -1,33 +1,26 @@
-#
-# CMake file for building dragon
-#
-project(dragon)
-
-# Minimum CMake doesnt really matter to me, I just picked mine
 cmake_minimum_required(VERSION 3.10)
-# We have to use C++17.
+project(dragon VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
-
-# Show all possible warnings and use highest optimization level
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3")
+set(CMAKE_INSTALL_PREFIX "../install")
 
-# `dragon` will be our main executable
-add_executable(dragon src/main.cpp)
-
-# These are the headers/C++ files to use
-set (components
-    "function"
-    "machine"
-    "option"
+add_library(dragon STATIC
+    src/function.cpp
+    src/option.cpp
+    src/machine.cpp
 )
 
+target_compile_features(dragon
+    PUBLIC
+      cxx_attributes
+      cxx_defaulted_functions
+      cxx_deleted_functions
+      cxx_final
+)
 
-# Make a library for each C++ file
-foreach (component IN LISTS components)
-add_library (${component} src/${component}.cpp)
-endforeach ()
+target_include_directories(dragon PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+target_compile_definitions(dragon PUBLIC __STDC_LIMIT_MACROS __STDC_FORMAT_MACROS)
 
-# Link libraries
-target_link_libraries(machine PRIVATE function option)
-target_link_libraries(dragon PRIVATE machine)
+install(TARGETS dragon DESTINATION lib)
+install(FILES src/dragon.hpp DESTINATION include)

@@ -5,56 +5,56 @@
 #include <sstream>
 #include <iostream>
 
-Object::Object()
+dragon::Object::Object()
 {
-    this->type = Type::NoneType;
+    this->type = dragon::Type::NoneType;
     this->value = false;
 }
 
-Object::Object(bool b)
+dragon::Object::Object(bool b)
 {
-    this->type = Type::Bool;
+    this->type = dragon::Type::Bool;
     this->value = b;
 }
 
-Object::Object(int n)
+dragon::Object::Object(int n)
 {
-    this->type = Type::Double;
+    this->type = dragon::Type::Double;
     this->value = double(n);
 }
 
-Object::Object(double n)
+dragon::Object::Object(double n)
 {
     this->type = Type::Double;
     this->value = n;
 }
 
-Object::Object(std::string s)
+dragon::Object::Object(std::string s)
 {
-    this->type = Type::String;
+    this->type = dragon::Type::String;
     this->value = s;
 }
 
-Object::Object(Function<Machine &, void> f)
+dragon::Object::Object(Function<dragon::Machine &, void> f)
 {
     this->type = Type::FunctionType;
     this->value = f;
 }
 
-Object::Object(std::vector<std::shared_ptr<Object>> list)
+dragon::Object::Object(std::vector<std::shared_ptr<dragon::Object>> list)
 {
     this->type = Type::List;
     this->value = list;
 }
 
-Object::Object(std::map<std::string, std::shared_ptr<Object>> table)
+dragon::Object::Object(std::map<std::string, std::shared_ptr<Object>> table)
 {
     this->type = Type::Table;
     this->value = table;
 }
 
 template <typename T>
-Option<T> Object::get()
+Option<T> dragon::Object::get()
 {
     try
     {
@@ -66,7 +66,7 @@ Option<T> Object::get()
     }
 }
 
-std::string Object::format()
+std::string dragon::Object::format()
 {
     switch (this->type)
     {
@@ -147,7 +147,7 @@ std::string Object::format()
     return "None";
 }
 
-Object::operator bool()
+dragon::Object::operator bool()
 {
     auto num_result = this->get<double>();
     if (num_result)
@@ -164,7 +164,7 @@ Object::operator bool()
     return false;
 }
 
-Object::operator double()
+dragon::Object::operator double()
 {
     auto result = this->get<double>();
     if (result)
@@ -174,7 +174,7 @@ Object::operator double()
     return 0.0;
 }
 
-Object::operator std::string()
+dragon::Object::operator std::string()
 {
     auto result = this->get<std::string>();
     if (result)
@@ -184,7 +184,7 @@ Object::operator std::string()
     return "";
 }
 
-void Object::operator()(Machine &m)
+void dragon::Object::operator()(Machine &m)
 {
     auto result = this->get<Function<Machine &, void>>();
     if (result)
@@ -194,7 +194,7 @@ void Object::operator()(Machine &m)
     }
 }
 
-std::shared_ptr<Object> Object::operator[](Object index)
+std::shared_ptr<dragon::Object> dragon::Object::operator[](Object index)
 {
     double num_index = index.get<double>().unwrap();
     std::string str_index = index.get<std::string>().unwrap();
@@ -227,7 +227,7 @@ std::shared_ptr<Object> Object::operator[](Object index)
     return std::make_shared<Object>(Object());
 }
 
-Object Object::operator+(Object o)
+dragon::Object dragon::Object::operator+(Object o)
 {
     switch (this->type)
     {
@@ -276,7 +276,7 @@ Object Object::operator+(Object o)
     return Object();
 }
 
-Object Object::operator*(Object o)
+dragon::Object dragon::Object::operator*(Object o)
 {
     switch (this->type)
     {
@@ -313,7 +313,7 @@ Object Object::operator*(Object o)
     return Object();
 }
 
-Object Object::operator-(Object o)
+dragon::Object dragon::Object::operator-(Object o)
 {
     switch (this->type)
     {
@@ -346,7 +346,7 @@ Object Object::operator-(Object o)
     return Object();
 }
 
-Object Object::operator/(Object o)
+dragon::Object dragon::Object::operator/(Object o)
 {
     switch (this->type)
     {
@@ -379,7 +379,7 @@ Object Object::operator/(Object o)
     return Object();
 }
 
-bool Object::operator==(Object o)
+bool dragon::Object::operator==(Object o)
 {
     if (this->type == o.type) {
         return this->value == o.value;
@@ -387,7 +387,7 @@ bool Object::operator==(Object o)
     return false;
 }
 
-bool Object::operator!=(Object o)
+bool dragon::Object::operator!=(Object o)
 {
     if (this->type != o.type) {
         return true;
@@ -395,17 +395,17 @@ bool Object::operator!=(Object o)
     return this->value != o.value;
 }
 
-void Machine::push(Object o)
+void dragon::Machine::push(Object o)
 {
     this->stack.push_back(std::make_shared<Object>(o));
 }
 
-void Machine::push(std::shared_ptr<Object> o)
+void dragon::Machine::push(std::shared_ptr<Object> o)
 {
     this->stack.push_back(o);
 }
 
-std::shared_ptr<Object> Machine::pop()
+std::shared_ptr<dragon::Object> dragon::Machine::pop()
 {
     if (this->stack.size() > 0) {
         auto result = this->stack.back();
@@ -416,42 +416,42 @@ std::shared_ptr<Object> Machine::pop()
     }
 }
 
-void Machine::add()
+void dragon::Machine::add()
 {
     auto a = *this->pop();
     auto b = *this->pop();
     this->push(b + a);
 }
 
-void Machine::sub()
+void dragon::Machine::sub()
 {
     auto a = *this->pop();
     auto b = *this->pop();
     this->push(a - b);
 }
 
-void Machine::mul()
+void dragon::Machine::mul()
 {
     auto a = *this->pop();
     auto b = *this->pop();
     this->push(b * a);
 }
 
-void Machine::div()
+void dragon::Machine::div()
 {
     auto a = *this->pop();
     auto b = *this->pop();
     this->push(a / b);
 }
 
-void Machine::negate()
+void dragon::Machine::negate()
 {
     auto a = *this->pop();
     this->push(Object::Number(-(a.get<double>().unwrap())));
 }
 
 
-void Machine::call()
+void dragon::Machine::call()
 {
     Machine temp_machine = Machine(*this);
 
@@ -460,7 +460,7 @@ void Machine::call()
     this->stack = temp_machine.stack;
 }
 
-void Machine::while_loop()
+void dragon::Machine::while_loop()
 {
     auto condition_f = this->pop();
     auto body_f = this->pop();
@@ -472,28 +472,28 @@ void Machine::while_loop()
     }
 }
 
-void Machine::assign()
+void dragon::Machine::assign()
 {
     std::shared_ptr<Object> ptr = this->pop();
     std::shared_ptr<Object> value = this->pop();
     *ptr = *value;
 }
 
-void Machine::index()
+void dragon::Machine::index()
 {
     std::shared_ptr<Object> key = this->pop();
     std::shared_ptr<Object> value = this->pop();
     this->push((*value)[*key]);
 }
 
-void Machine::store()
+void dragon::Machine::store()
 {
     std::string key = this->pop()->get<std::string>().unwrap();
     std::shared_ptr<Object> value = this->pop();
     this->registers[key] = value;
 }
 
-void Machine::load()
+void dragon::Machine::load()
 {
     std::string key = this->pop()->get<std::string>().unwrap();
 
@@ -508,7 +508,7 @@ void Machine::load()
     this->push(this->registers[key]);
 }
 
-std::string Machine::format()
+std::string dragon::Machine::format()
 {
     // std::vector<std::shared_ptr<Object>> stack = {};
     // std::map<std::string, std::shared_ptr<Object>> registers;
