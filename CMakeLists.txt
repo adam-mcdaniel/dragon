@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3")
 # set(CMAKE_INSTALL_PREFIX "../install")
 
-add_library(libdragon STATIC
+add_library(dragon STATIC
     src/function.cpp
     src/option.cpp
     src/machine.cpp
@@ -24,7 +24,8 @@ target_compile_definitions(dragon PUBLIC __STDC_LIMIT_MACROS __STDC_FORMAT_MACRO
 
 
 
-install(TARGETS dragon DESTINATION lib)
+install(TARGETS dragon)
 install(FILES src/dragon.hpp src/function.hpp src/machine.hpp src/option.hpp DESTINATION include)
+
 
 export(PACKAGE dragon)
