@@ -26,3 +26,5 @@ target_compile_definitions(dragon PUBLIC __STDC_LIMIT_MACROS __STDC_FORMAT_MACRO
 
 install(TARGETS dragon DESTINATION lib)
 install(FILES src/dragon.hpp src/function.hpp src/machine.hpp src/option.hpp DESTINATION include)
+
+export(PACKAGE dragon)
