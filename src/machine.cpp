@@ -166,7 +166,7 @@ dragon::Object dragon::Object::clone()
             auto result = Object::Map();
             for (auto pair : this->get<std::map<std::string, std::shared_ptr<Object>>>().unwrap())
             {
-                result[Object::String(pair.first)] = std::make_shared<Object>(pair.second->clone());
+                *result[Object::String(pair.first)] = *std::make_shared<Object>(pair.second->clone());
             }
             return result;
         }
