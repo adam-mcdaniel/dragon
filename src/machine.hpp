@@ -23,6 +23,8 @@ namespace dragon {
         void push(std::shared_ptr<Object>);
         std::shared_ptr<Object> pop();
 
+        void clone();
+
         void load();
         void store();
 

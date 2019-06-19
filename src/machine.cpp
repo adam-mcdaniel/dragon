@@ -471,6 +471,11 @@ bool dragon::Object::operator!=(Object o)
     return this->value != o.value;
 }
 
+void dragon::Machine::clone()
+{
+    this->push(this->pop()->clone());
+}
+
 void dragon::Machine::push(Object o)
 {
     this->stack.push_back(std::make_shared<Object>(o));
