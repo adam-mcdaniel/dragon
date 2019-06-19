@@ -147,6 +147,82 @@ std::string dragon::Object::format()
     return "None";
 }
 
+
+dragon::Object dragon::Object::clone()
+{
+    switch (this->type)
+    {
+    case Type::List:
+        {
+            auto result = Object::List({});
+            for (auto obj : this->get<std::vector<std::shared_ptr<Object>>>().unwrap()) {
+                result.push(*obj);
+            }
+            return result;
+        }
+        break;
+    case Type::Table:
+        {
+            auto result = Object::Map();
+            for (auto pair : this->get<std::map<std::string, std::shared_ptr<Object>>>().unwrap())
+            {
+                result[Object::String(pair.first)] = std::make_shared<Object>(*pair.second);
+            }
+            return result;
+        }
+        break;
+    default:    
+        return Object(*this);
+        break;
+    }
+}
+
+
+void dragon::Object::push(dragon::Object operand)
+{
+    this->push(std::make_shared<Object>(operand));
+}
+
+
+void dragon::Object::push(std::shared_ptr<dragon::Object> operand)
+{
+    switch (this->type)
+    {
+    case Type::List:
+        {
+            auto list = this->get<std::vector<std::shared_ptr<Object>>>().unwrap();
+            list.push_back(operand);
+            this->value = list;
+        }
+        break;
+    default:    
+        break;
+    }
+}
+
+
+std::shared_ptr<dragon::Object> dragon::Object::pop()
+{
+    switch (this->type)
+    {
+    case Type::List:
+        {
+            auto list = this->get<std::vector<std::shared_ptr<Object>>>().unwrap();
+            if (list.size() > 0) {
+                auto result = list.back();
+                list.pop_back();
+                this->value = list;
+                return result;
+            }
+        }
+        break;
+    default:    
+        break;
+    }
+    return std::make_shared<Object>(Object());
+}
+
+
 dragon::Object::operator bool()
 {
     auto num_result = this->get<double>();

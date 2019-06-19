@@ -82,6 +82,11 @@ namespace dragon {
         template <typename T>
         Option<T> get();
         std::string format();
+        
+        Object clone();
+        void push(Object);
+        void push(std::shared_ptr<Object>);
+        std::shared_ptr<Object> pop();
 
         operator bool();
         operator double();
