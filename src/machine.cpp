@@ -225,20 +225,15 @@ std::shared_ptr<dragon::Object> dragon::Object::pop()
 
 dragon::Object::operator bool()
 {
-    auto bool_result = this->get<bool>();
-    if (bool_result)
+    switch (this->type)
     {
-        return bool_result.unwrap();
+    case Type::Bool:
+        return this->get<bool>().unwrap();
+    case Type::Double:
+        return bool(this->get<double>().unwrap());
+    default:
+        return false;
     }
-
-
-    auto num_result = this->get<double>();
-    if (num_result)
-    {
-        return int(num_result.unwrap());
-    }
-
-    return false;
 }
 
 dragon::Object::operator double()
@@ -466,9 +461,6 @@ bool dragon::Object::operator==(Object o)
 
 bool dragon::Object::operator!=(Object o)
 {
-    //if (this->type != o.type) {
-    //    return true;
-    //}
     return this->value != o.value;
 }
 
