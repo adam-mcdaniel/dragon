@@ -466,9 +466,9 @@ bool dragon::Object::operator==(Object o)
 
 bool dragon::Object::operator!=(Object o)
 {
-    if (this->type != o.type) {
-        return true;
-    }
+    //if (this->type != o.type) {
+    //    return true;
+    //}
     return this->value != o.value;
 }
 
