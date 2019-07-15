@@ -540,6 +540,7 @@ void dragon::Machine::call()
     Function<Machine &, void, Machine> function = f->get<Function<Machine &, void, Machine>>().unwrap();
 
     Machine temp_machine = function.get_context();
+    temp_machine.stack = this->stack;
 
     (*f)(temp_machine);
     this->stack = temp_machine.stack;
