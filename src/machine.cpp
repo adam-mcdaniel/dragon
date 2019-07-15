@@ -35,7 +35,7 @@ dragon::Object::Object(std::string s)
     this->value = s;
 }
 
-dragon::Object::Object(Function<dragon::Machine &, void> f)
+dragon::Object::Object(Function<dragon::Machine &, void, Machine> f)
 {
     this->type = Type::FunctionType;
     this->value = f;
@@ -262,10 +262,10 @@ dragon::Object::operator std::string()
 
 void dragon::Object::operator()(Machine &m)
 {
-    auto result = this->get<Function<Machine &, void>>();
+    auto result = this->get<Function<Machine &, void, Machine>>();
     if (result)
     {
-        Function<Machine &, void> f = result.unwrap();
+        Function<Machine &, void, Machine> f = result.unwrap();
         f(m);
     }
 }
@@ -534,9 +534,13 @@ void dragon::Machine::negate()
 
 void dragon::Machine::call()
 {
-    Machine temp_machine = Machine(*this);
+    // Machine temp_machine = Machine(*this);
 
-    auto f = temp_machine.pop();
+    auto f = this->pop();
+    Function<Machine &, void, Machine> function = f->get<Function<Machine &, void, Machine>>().unwrap();
+
+    Machine temp_machine = function.get_context();
+
     (*f)(temp_machine);
     this->stack = temp_machine.stack;
 }

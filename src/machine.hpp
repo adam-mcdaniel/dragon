@@ -12,7 +12,7 @@ namespace dragon {
     class Object;
     class Machine;
 
-    typedef std::variant<bool, double, std::string, Function<Machine &, void>, std::vector<std::shared_ptr<Object>>, std::map<std::string, std::shared_ptr<Object>>> Value;
+    typedef std::variant<bool, double, std::string, Function<Machine &, void, Machine>, std::vector<std::shared_ptr<Object>>, std::map<std::string, std::shared_ptr<Object>>> Value;
 
     class Machine
     {
@@ -66,14 +66,14 @@ namespace dragon {
         explicit Object(int);
         explicit Object(double);
         explicit Object(std::string);
-        explicit Object(Function<Machine &, void>);
+        explicit Object(Function<Machine &, void, Machine>);
         explicit Object(std::vector<std::shared_ptr<Object>>);
         explicit Object(std::map<std::string, std::shared_ptr<Object>>);
 
         inline static Object Bool(bool b = false) { return Object(bool(b)); }
         inline static Object Number(double n = 0) { return Object(double(n)); }
         inline static Object String(std::string s = "") { return Object(s); }
-        inline static Object Fn(Function<Machine &, void> f) { return Object(f); }
+        inline static Object Fn(Function<Machine &, void, Machine> f) { return Object(f); }
         inline static Object List(std::vector<std::shared_ptr<Object>> list) { return Object(list); }
         inline static Object Map()
         {
