@@ -24,6 +24,7 @@ namespace dragon {
         std::shared_ptr<Object> pop();
 
         void clone();
+        void duplicate();
 
         void load();
         void store();

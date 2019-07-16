@@ -469,6 +469,13 @@ void dragon::Machine::clone()
     this->push(this->pop()->clone());
 }
 
+void dragon::Machine::duplicate()
+{
+    auto popped = this->pop();
+    this->push(popped->clone());
+    this->push(popped->clone());
+}
+
 void dragon::Machine::push(Object o)
 {
     this->stack.push_back(std::make_shared<Object>(o));
