@@ -469,13 +469,6 @@ void dragon::Machine::clone()
     this->push(this->pop()->clone());
 }
 
-void dragon::Machine::duplicate()
-{
-    auto popped = this->pop();
-    this->push(popped->clone());
-    this->push(popped->clone());
-}
-
 void dragon::Machine::push(Object o)
 {
     this->stack.push_back(std::make_shared<Object>(o));
@@ -534,8 +527,6 @@ void dragon::Machine::negate()
 
 void dragon::Machine::call()
 {
-    // Machine temp_machine = Machine(*this);
-
     auto f = this->pop();
     Function<Machine &, void, Machine> function = f->get<Function<Machine &, void, Machine>>().unwrap();
 
@@ -543,6 +534,24 @@ void dragon::Machine::call()
     temp_machine.stack = this->stack;
 
     (*f)(temp_machine);
+    this->stack = temp_machine.stack;
+}
+
+
+void dragon::Machine::method_call()
+{
+    // Machine temp_machine = Machine(*this);
+
+    auto index = this->pop();
+    auto object = this->pop();
+    this->push(object);
+
+    Function<Machine &, void, Machine> function = ((*object)[*index])->get<Function<Machine &, void, Machine>>().unwrap();
+
+    Machine temp_machine = function.get_context();
+    temp_machine.stack = this->stack;
+
+    (function)(temp_machine);
     this->stack = temp_machine.stack;
 }
 
