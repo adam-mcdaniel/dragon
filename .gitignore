@@ -4,4 +4,6 @@ build
 ci/*/
 *.build
 *.dist
+testing
+test
 main.cpp

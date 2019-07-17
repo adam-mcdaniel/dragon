@@ -35,7 +35,7 @@ dragon::Object::Object(std::string s)
     this->value = s;
 }
 
-dragon::Object::Object(Function<dragon::Machine &, void> f)
+dragon::Object::Object(Function<dragon::Machine &, void, Machine> f)
 {
     this->type = Type::FunctionType;
     this->value = f;
@@ -225,19 +225,15 @@ std::shared_ptr<dragon::Object> dragon::Object::pop()
 
 dragon::Object::operator bool()
 {
-    auto num_result = this->get<double>();
-    if (num_result)
+    switch (this->type)
     {
-        return int(num_result.unwrap());
+    case Type::Bool:
+        return this->get<bool>().unwrap();
+    case Type::Double:
+        return bool(this->get<double>().unwrap());
+    default:
+        return false;
     }
-    
-    auto bool_result = this->get<bool>();
-    if (bool_result)
-    {
-        return bool_result.unwrap();
-    }
-
-    return false;
 }
 
 dragon::Object::operator double()
@@ -262,10 +258,10 @@ dragon::Object::operator std::string()
 
 void dragon::Object::operator()(Machine &m)
 {
-    auto result = this->get<Function<Machine &, void>>();
+    auto result = this->get<Function<Machine &, void, Machine>>();
     if (result)
     {
-        Function<Machine &, void> f = result.unwrap();
+        Function<Machine &, void, Machine> f = result.unwrap();
         f(m);
     }
 }
@@ -465,9 +461,6 @@ bool dragon::Object::operator==(Object o)
 
 bool dragon::Object::operator!=(Object o)
 {
-    if (this->type != o.type) {
-        return true;
-    }
     return this->value != o.value;
 }
 
@@ -534,10 +527,31 @@ void dragon::Machine::negate()
 
 void dragon::Machine::call()
 {
-    Machine temp_machine = Machine(*this);
+    auto f = this->pop();
+    Function<Machine &, void, Machine> function = f->get<Function<Machine &, void, Machine>>().unwrap();
 
-    auto f = temp_machine.pop();
+    Machine temp_machine = function.get_context();
+    temp_machine.stack = this->stack;
+
     (*f)(temp_machine);
+    this->stack = temp_machine.stack;
+}
+
+
+void dragon::Machine::method_call()
+{
+    // Machine temp_machine = Machine(*this);
+
+    auto index = this->pop();
+    auto object = this->pop();
+    this->push(object);
+
+    Function<Machine &, void, Machine> function = ((*object)[*index])->get<Function<Machine &, void, Machine>>().unwrap();
+
+    Machine temp_machine = function.get_context();
+    temp_machine.stack = this->stack;
+
+    (function)(temp_machine);
     this->stack = temp_machine.stack;
 }
 

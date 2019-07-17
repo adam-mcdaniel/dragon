@@ -1,13 +1,23 @@
 #pragma once
 #include <functional>
 
-template <typename I, typename O> class Function {
+// namespace dragon {
+//   class Machine;
+// }
+
+template <typename I, typename O, typename C> class Function {
 public:
   Function() {
     this->f = [](I) { return O(); };
+    this->context = C();
   }
 
-  template <class T> Function(T t) { this->f = std::function<O(I)>(t); }
+  template <class T> Function(T t, C c) {
+    this->f = std::function<O(I)>(t);
+    this->context = c;
+  }
+
+  C get_context() { return this->context; }
 
   inline O operator()(I i) { return this->f(i); }
 
@@ -19,4 +29,5 @@ public:
 
 private:
   std::function<O(I)> f;
+  C context;
 };
