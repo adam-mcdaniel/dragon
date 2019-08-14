@@ -18,6 +18,11 @@ namespace dragon {
     {
     public:
         Machine() {}
+        Machine(const Machine &m) {
+            this->stack = m.stack;
+            this->registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+            (*this->registers) = *m.registers;
+        } 
 
         void push(Object);
         void push(std::shared_ptr<Object>);
