@@ -47,7 +47,7 @@ dragon::Object::Object(std::vector<std::shared_ptr<dragon::Object>> list)
     this->value = list;
 }
 
-dragon::Object::Object(std::unordered_map<std::string, std::shared_ptr<Object>> table)
+dragon::Object::Object(std::map<std::string, std::shared_ptr<Object>> table)
 {
     this->type = Type::Table;
     this->value = table;
@@ -114,7 +114,7 @@ std::string dragon::Object::format()
     case Type::Table:
     {
         std::string result = "{";
-        auto my_map = this->get<std::unordered_map<std::string, std::shared_ptr<Object>>>().unwrap();
+        auto my_map = this->get<std::map<std::string, std::shared_ptr<Object>>>().unwrap();
         bool pop = false;
         for (auto pair : my_map)
         {
@@ -164,7 +164,7 @@ dragon::Object dragon::Object::clone()
     case Type::Table:
         {
             auto result = Object::Map();
-            for (auto pair : this->get<std::unordered_map<std::string, std::shared_ptr<Object>>>().unwrap())
+            for (auto pair : this->get<std::map<std::string, std::shared_ptr<Object>>>().unwrap())
             {
                 *result[Object::String(pair.first)] = *std::make_shared<Object>(pair.second->clone());
             }
@@ -280,7 +280,7 @@ std::shared_ptr<dragon::Object> dragon::Object::operator[](Object index)
         return (*pval)[num_index];
     }
 
-    if (auto pval = std::get_if<std::unordered_map<std::string, std::shared_ptr<Object>>>(&this->value))
+    if (auto pval = std::get_if<std::map<std::string, std::shared_ptr<Object>>>(&this->value))
     {
         // if (opt_str_index >= pval->size()) {
         //     pval->push_back(std::make_shared<Object>(Object()));
