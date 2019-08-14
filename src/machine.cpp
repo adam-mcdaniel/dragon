@@ -471,19 +471,19 @@ void dragon::Machine::clone()
 
 void dragon::Machine::push(Object o)
 {
-    this->stack->push_back(std::make_shared<Object>(o));
+    this->stack.push_back(std::make_shared<Object>(o));
 }
 
 void dragon::Machine::push(std::shared_ptr<Object> o)
 {
-    this->stack->push_back(o);
+    this->stack.push_back(o);
 }
 
 std::shared_ptr<dragon::Object> dragon::Machine::pop()
 {
-    if (this->stack->size() > 0) {
-        auto result = this->stack->back();
-        this->stack->pop_back();
+    if (this->stack.size() > 0) {
+        auto result = this->stack.back();
+        this->stack.pop_back();
         return result;
     } else {
         return std::make_shared<Object>(Object());
@@ -609,7 +609,7 @@ std::string dragon::Machine::format()
     // std::map<std::string, std::shared_ptr<Object>> registers;
     std::string result = "Machine:\n  [";
     bool pop = false;
-    for (auto obj : *this->stack)
+    for (auto obj : this->stack)
     {
         pop = true;
         result += (*obj).format();

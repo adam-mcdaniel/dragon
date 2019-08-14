@@ -44,7 +44,7 @@ namespace dragon {
         std::string format();
 
     private:
-        std::shared_ptr<std::vector<std::shared_ptr<Object>>> stack = std::make_shared<std::vector<std::shared_ptr<Object>>>();
+        std::vector<std::shared_ptr<Object>> stack = {};
         std::shared_ptr<std::map<std::string, std::shared_ptr<Object>>> registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
     };
 
