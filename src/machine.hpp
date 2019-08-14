@@ -20,9 +20,10 @@ namespace dragon {
         Machine() {}
         Machine(const Machine &m) {
             this->stack = m.stack;
-            this->registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
-            (*this->registers) = *m.registers;
-        } 
+            this->local_registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+            this->global_registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+            (*this->global_registers) = *m.local_registers;
+        }
 
         void push(Object);
         void push(std::shared_ptr<Object>);
@@ -50,7 +51,8 @@ namespace dragon {
 
     private:
         std::vector<std::shared_ptr<Object>> stack = {};
-        std::shared_ptr<std::map<std::string, std::shared_ptr<Object>>> registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+        std::shared_ptr<std::map<std::string, std::shared_ptr<Object>>> local_registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+        std::shared_ptr<std::map<std::string, std::shared_ptr<Object>>> global_registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
     };
 
     enum Type

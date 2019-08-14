@@ -585,22 +585,30 @@ void dragon::Machine::store()
 {
     std::string key = this->pop()->get<std::string>().unwrap();
     std::shared_ptr<Object> value = this->pop();
-    (*this->registers)[key] = value;
+    (*this->local_registers)[key] = value;
 }
 
 void dragon::Machine::load()
 {
     std::string key = this->pop()->get<std::string>().unwrap();
 
-    auto iter = this->registers->find(key);
-    if (iter == this->registers->end())
+    auto iter = this->local_registers->find(key);
+    if (iter == this->local_registers->end())
     {
-        this->registers->insert(
-            std::pair<std::string, std::shared_ptr<Object>>(
-                key, std::make_shared<Object>(Object())));
+        iter = this->global_registers->find(key);
+        if (iter == this->global_registers->end())
+        {
+            this->local_registers->insert(
+                std::pair<std::string, std::shared_ptr<Object>>(
+                    key, std::make_shared<Object>(Object())));
+        } else {
+            this->local_registers->insert(
+                std::pair<std::string, std::shared_ptr<Object>>(
+                    key, (*this->global_registers)[key]));
+        }
     }
 
-    this->push((*this->registers)[key]);
+    this->push((*this->local_registers)[key]);
 }
 
 std::string dragon::Machine::format()
@@ -623,7 +631,7 @@ std::string dragon::Machine::format()
     }
     result += "]\n  {";
 
-    auto my_map = this->registers;
+    auto my_map = this->local_registers;
     pop = false;
     for (auto pair : *my_map)
     {
