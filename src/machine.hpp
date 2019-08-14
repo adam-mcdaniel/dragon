@@ -22,9 +22,9 @@ namespace dragon {
             this->stack = m.stack;
             this->local_registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
             this->global_registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
-
-            this->global_registers->merge(*m.local_registers);
-            this->global_registers->merge(*m.global_registers);
+            
+            this->global_registers->insert(m.local_registers->begin(), m.local_registers->end());
+            this->global_registers->insert(m.global_registers->begin(), m.global_registers->end());
         }
 
         void push(Object);
