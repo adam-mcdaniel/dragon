@@ -1,7 +1,7 @@
 #pragma once
 #include "function.hpp"
 #include "option.hpp"
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <memory>
 #include <vector>
@@ -12,7 +12,7 @@ namespace dragon {
     class Object;
     class Machine;
 
-    typedef std::variant<bool, double, std::string, Function<Machine &, void, Machine>, std::vector<std::shared_ptr<Object>>, std::map<std::string, std::shared_ptr<Object>>> Value;
+    typedef std::variant<bool, double, std::string, Function<Machine &, void, Machine>, std::vector<std::shared_ptr<Object>>, std::unordered_map<std::string, std::shared_ptr<Object>>> Value;
 
     class Machine
     {
@@ -20,7 +20,7 @@ namespace dragon {
         Machine() {}
         Machine(const Machine &m) {
             this->stack = m.stack;
-            this->registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+            this->registers = std::make_shared<std::unordered_map<std::string, std::shared_ptr<Object>>>();
             (*this->registers) = *m.registers;
         } 
 
@@ -50,7 +50,7 @@ namespace dragon {
 
     private:
         std::vector<std::shared_ptr<Object>> stack = {};
-        std::shared_ptr<std::map<std::string, std::shared_ptr<Object>>> registers = std::make_shared<std::map<std::string, std::shared_ptr<Object>>>();
+        std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<Object>>> registers = std::make_shared<std::unordered_map<std::string, std::shared_ptr<Object>>>();
     };
 
     enum Type
@@ -74,7 +74,7 @@ namespace dragon {
         explicit Object(std::string);
         explicit Object(Function<Machine &, void, Machine>);
         explicit Object(std::vector<std::shared_ptr<Object>>);
-        explicit Object(std::map<std::string, std::shared_ptr<Object>>);
+        explicit Object(std::unordered_map<std::string, std::shared_ptr<Object>>);
 
         inline static Object Bool(bool b = false) { return Object(bool(b)); }
         inline static Object Number(double n = 0) { return Object(double(n)); }
@@ -83,7 +83,7 @@ namespace dragon {
         inline static Object List(std::vector<std::shared_ptr<Object>> list) { return Object(list); }
         inline static Object Map()
         {
-            std::map<std::string, std::shared_ptr<Object>> map;
+            std::unordered_map<std::string, std::shared_ptr<Object>> map;
             return Object(map);
         }
 
