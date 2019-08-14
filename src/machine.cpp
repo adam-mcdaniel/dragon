@@ -530,11 +530,11 @@ void dragon::Machine::call()
     auto f = this->pop();
     Function<Machine &, void, Machine> function = f->get<Function<Machine &, void, Machine>>().unwrap();
 
-    Machine temp_machine = function.get_context();
-    temp_machine.stack = this->stack;
+    std::shared_ptr<Machine> temp_machine = function.get_context();
+    temp_machine->stack = this->stack;
 
-    (*f)(temp_machine);
-    this->stack = temp_machine.stack;
+    (*f)(*temp_machine);
+    this->stack = temp_machine->stack;
 }
 
 
@@ -548,11 +548,11 @@ void dragon::Machine::method_call()
 
     Function<Machine &, void, Machine> function = ((*object)[*index])->get<Function<Machine &, void, Machine>>().unwrap();
 
-    Machine temp_machine = function.get_context();
-    temp_machine.stack = this->stack;
+    std::shared_ptr<Machine> temp_machine = function.get_context();
+    temp_machine->stack = this->stack;
 
-    (function)(temp_machine);
-    this->stack = temp_machine.stack;
+    (function)(*temp_machine);
+    this->stack = temp_machine->stack;
 }
 
 void dragon::Machine::while_loop()

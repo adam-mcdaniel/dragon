@@ -18,7 +18,7 @@ public:
     this->context = std::make_shared<C>(c);
   }
 
-  C get_context() { return *this->context; }
+  std::shared_ptr<C> get_context() { return this->context; }
 
   inline O operator()(I i) { return this->f(i); }
 
