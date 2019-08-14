@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <functional>
 
 // namespace dragon {
@@ -9,15 +10,15 @@ template <typename I, typename O, typename C> class Function {
 public:
   Function() {
     this->f = [](I) { return O(); };
-    this->context = C();
+    this->context = std::make_shared<C>(C());
   }
 
   template <class T> Function(T t, C c) {
     this->f = std::function<O(I)>(t);
-    this->context = c;
+    this->context = std::make_shared<C>(c);
   }
 
-  C get_context() { return this->context; }
+  C get_context() { return *this->context; }
 
   inline O operator()(I i) { return this->f(i); }
 
@@ -29,5 +30,5 @@ public:
 
 private:
   std::function<O(I)> f;
-  C context;
+  std::shared_ptr<C> context;
 };
