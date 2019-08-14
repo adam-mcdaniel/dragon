@@ -471,19 +471,19 @@ void dragon::Machine::clone()
 
 void dragon::Machine::push(Object o)
 {
-    this->stack.push_back(std::make_shared<Object>(o));
+    this->stack->push_back(std::make_shared<Object>(o));
 }
 
 void dragon::Machine::push(std::shared_ptr<Object> o)
 {
-    this->stack.push_back(o);
+    this->stack->push_back(o);
 }
 
 std::shared_ptr<dragon::Object> dragon::Machine::pop()
 {
-    if (this->stack.size() > 0) {
-        auto result = this->stack.back();
-        this->stack.pop_back();
+    if (this->stack->size() > 0) {
+        auto result = this->stack->back();
+        this->stack->pop_back();
         return result;
     } else {
         return std::make_shared<Object>(Object());
@@ -585,22 +585,22 @@ void dragon::Machine::store()
 {
     std::string key = this->pop()->get<std::string>().unwrap();
     std::shared_ptr<Object> value = this->pop();
-    this->registers[key] = value;
+    (*this->registers)[key] = value;
 }
 
 void dragon::Machine::load()
 {
     std::string key = this->pop()->get<std::string>().unwrap();
 
-    auto iter = this->registers.find(key);
-    if (iter == this->registers.end())
+    auto iter = this->registers->find(key);
+    if (iter == this->registers->end())
     {
-        this->registers.insert(
+        this->registers->insert(
             std::pair<std::string, std::shared_ptr<Object>>(
                 key, std::make_shared<Object>(Object())));
     }
 
-    this->push(this->registers[key]);
+    this->push((*this->registers)[key]);
 }
 
 std::string dragon::Machine::format()
@@ -609,7 +609,7 @@ std::string dragon::Machine::format()
     // std::map<std::string, std::shared_ptr<Object>> registers;
     std::string result = "Machine:\n  [";
     bool pop = false;
-    for (auto obj : this->stack)
+    for (auto obj : *this->stack)
     {
         pop = true;
         result += (*obj).format();
@@ -625,7 +625,7 @@ std::string dragon::Machine::format()
 
     auto my_map = this->registers;
     pop = false;
-    for (auto pair : my_map)
+    for (auto pair : *my_map)
     {
         pop = true;
         result += pair.first;
